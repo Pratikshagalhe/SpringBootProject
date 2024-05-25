@@ -2,7 +2,9 @@ package com.springbootproject1.service;
 
 import java.util.List;
 
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.springbootproject1.entity.*;
@@ -16,7 +18,12 @@ public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 	
-	public Product createProduct(Product product) {
+	@Autowired
+	private CategoryService categoryService;
+	
+	public Product createProduct(Product product,Long categoryId) {
+		 Category category = categoryService.getCategoryById(categoryId);
+	     product.setCategory(category);
 		return productRepository.save(product);
 	}
 	
@@ -36,4 +43,8 @@ public class ProductService {
 	   public void deleteProduct(Long id) {
 		   productRepository.deleteById(id);
 	    }
+	   
+	   public Page getAllProductWithPage(int page,int size){
+		   return (Page) productRepository.findAll(PageRequest.of(page, size));
+	   }
 }

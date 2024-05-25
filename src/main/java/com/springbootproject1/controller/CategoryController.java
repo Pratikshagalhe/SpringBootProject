@@ -3,7 +3,9 @@ package com.springbootproject1.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springbootproject1.entity.*;
@@ -42,8 +45,8 @@ public class CategoryController {
 	
 	
 	@GetMapping
-	public List<Category> getAllAccount() {
-		return categoryService.getAllAccount();
+	public List<Category> getAllCategory() {
+		return categoryService.getAllCategory();
 	}
 	
 	 @PutMapping("/{id}")
@@ -58,6 +61,10 @@ public class CategoryController {
 	        return ResponseEntity.noContent().build();
 	    }
 	
-	
+	 @GetMapping("/page")
+	    public ResponseEntity<Page> getAllCategoriesWithPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+	        Page categoryPage = (Page) categoryRepository.findAll(PageRequest.of(page, size));
+	        return ResponseEntity.ok(categoryPage);
+	    }
 }
 

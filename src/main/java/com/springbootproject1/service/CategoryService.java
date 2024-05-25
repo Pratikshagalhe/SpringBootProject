@@ -2,7 +2,9 @@ package com.springbootproject1.service;
 
 import java.util.List;
 
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.springbootproject1.entity.*;
@@ -23,7 +25,7 @@ public class CategoryService {
 		return categoryRepository.findById(id).orElseThrow();
 	}
 	
-	public List<Category> getAllAccount() {
+	public List<Category> getAllCategory() {
 		return categoryRepository.findAll();
 	}
 	   public Category updateCategory(Long id, Category category) {
@@ -35,4 +37,8 @@ public class CategoryService {
 	   public void deleteCategory(Long id) {
 	        categoryRepository.deleteById(id);
 	    }
+	   
+	   public Page getAllCategoriesWithPage(int page,int size){
+		   return (Page) categoryRepository.findAll(PageRequest.of(page, size));
+	   }
 }
